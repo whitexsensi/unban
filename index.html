@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire ID Unban - Moderator Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2ecc71;
+            --secondary: #27ae60;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --accent: #f1c40f;
+            --danger: #e74c3c;
+        }
+        
+        body {
+            background: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--primary);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .login-card h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .login-card p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .modal h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--primary);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px dashed #ddd;
+            background: #f9f9f9;
+            cursor: pointer;
+        }
+        
+        .file-upload-label:hover {
+            border-color: var(--primary);
+        }
+        
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+        
+        .custom-select select {
+            appearance: none;
+            padding-right: 40px;
+        }
+        
+        .custom-select::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #666;
+        }
+        
+        .login-info {
+            background: #f0f9f4;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f9f9f9;
+            border: 1px solid #eee;
+        }
+        
+        .feature i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .results {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 30px 0;
+            color: var(--primary);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 2s ease-in-out;
+        }
+        
+        .reason {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: left;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .reason h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 2px solid var(--primary);
+            margin-top: 50px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .game-icon {
+            width: 80px;
+            margin: 20px auto;
+        }
+        
+        /* Loading Animation Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-animation {
+            text-align: center;
+        }
+        
+        .loading-animation img {
+            width: 180px;
+            height: 180px;
+            animation: zoomPulse 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes zoomPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .loading-animation img {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="https://www.gematsu.com/wp-content/uploads/2022/11/Company-Logo_Garena-Inits.png" alt="Garena Logo">
+                <h1>Free Fire ID Unban</h1>
+            </div>
+            <div class="badge">
+                <i class="fas fa-shield-alt"></i> Moderator Portal
+            </div>
+        </header>
+        
+        <!-- Login Section -->
+        <section id="login-section" class="login-section">
+            <div class="login-card">
+                <h2>Moderator Login</h2>
+                <p>This portal is restricted to authorized Free Fire moderators only</p>
+                
+                <div class="login-info">
+                    <i class="fas fa-user-secret"></i> *****@garena.com | ********
+                </div>
+                
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                    <i class="fas fa-info-circle"></i> For security reasons, you must complete the verification process to access the moderator panel.
+                </p>
+                
+                <button id="login-btn" class="btn btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Verify & Login
+                </button>
+            </div>
+        </section>
+        
+        <!-- App Download Modal -->
+        <div id="app-modal" class="modal">
+            <div class="modal-content">
+                <h3>Important Security Verification</h3>
+                <p>To access the moderator portal, you must complete the following security steps:</p>
+                
+                <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                    <p><strong>Step 1:</strong> Download and install the Garena Security Authenticator app</p>
+                    <p><strong>Step 2:</strong> Open the app to complete automatic verification</p>
+                    <p><strong>Step 3:</strong> Your credentials will be automatically verified</p>
+                </div>
+                
+                <p style="font-size: 14px; color: #666;">
+                    This app ensures that only authorized personnel can access sensitive account data and perform unban operations.
+                </p>
+                
+                <div class="modal-buttons">
+                    <button id="download-btn" class="btn">
+                        <i class="fas fa-download"></i> Download App
+                    </button>
+                    <button id="cancel-btn" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading Section (After App Download) -->
+        <div id="loading-section" class="loading-overlay">
+            <div class="loading-animation">
+                <img src="ffloading.png" alt="Free Fire Loading">
+            </div>
+        </div>
+        
+        <!-- Form Section -->
+        <div id="form-section" class="form-section">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; text-align: center;">Submit Unban Request</h2>
+                <form id="unban-form">
+                    <div class="form-group">
+                        <label for="uid">Account UID</label>
+                        <input type="text" id="uid" name="uid" placeholder="Enter Free Fire UID" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nickname">Account Nickname</label>
+                        <input type="text" id="nickname" name="nickname" placeholder="Enter nickname" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="device">Your Device</label>
+                        <div class="custom-select">
+                            <select id="device" name="device" required>
+                                <option value="">Select your device</option>
+                                <option value="Android">Android</option>
+                                <option value="iOS">iOS</option>
+                                <option value="PC (Emulator)">PC (Emulator)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="server">Server/Region</label>
+                        <div class="custom-select">
+                            <select id="server" name="server" required>
+                                <option value="">Select your server</option>
+                                <option value="India">India</option>
+                                <option value="Thailand">Thailand</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Middle East (MENA)">Middle East (MENA)</option>
+                                <option value="Mexico (LATAM)">Mexico (LATAM)</option>
+                                <option value="Taiwan">Taiwan</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Europe">Europe</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Vietnam">Vietnam</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reason">Reason for Ban</label>
+                        <div class="custom-select">
+                            <select id="reason" name="reason" required>
+                                <option value="">Select reason for ban</option>
+                                <option value="I used hacking">I used hacking</option>
+                                <option value="I did verbal abuse">I did verbal abuse</option>
+                                <option value="My friend took my Free Fire ID and used it to cheat, which got it banned">My friend took my Free Fire ID and used it to cheat, which got it banned</option>
+                                <option value="An unknown person hacked my Free Fire ID and used it to cheat, which got it banned">An unknown person hacked my Free Fire ID and used it to cheat, which got it banned</option>
+                                <option value="I don't know anything about how my ID got banned">I don't know anything about how my ID got banned</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="level">ID Level</label>
+                        <input type="number" id="level" name="level" placeholder="Enter account level" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Upload Screenshot (Screenshot of Ban Message)</label>
+                        <div class="file-upload">
+                            <input type="file" id="screenshot" name="screenshot" accept="image/*">
+                            <div class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span id="file-name">Choose File</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-block">
+                        <i class="fas fa-paper-plane"></i> Submit Unban Request
+                    </button>
+                </form>
+            </div>
+            
+            <div class="grid">
+                <div class="feature">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Official Support</h3>
+                    <p>Direct connection with Garena Free Fire support team</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-clock"></i>
+                    <h3>Fast Processing</h3>
+                    <p>Quick resolution within 24-48 hours in most cases</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock-open"></i>
+                    <h3>High Success Rate</h3>
+                    <p>Over 85% success rate for unban requests</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading Animation Overlay (After Form Submit) -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-animation">
+                <img src="ffloading.png" alt="Free Fire Loading">
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results-section" class="results">
+            <div class="card">
+                <div class="game-icon">
+                    <img src="https://an1.com/uploads/posts/2025-10/1761724015_free-fire.png" alt="Free Fire" style="width: 100%;">
+                </div>
+                
+                <h2 style="margin-bottom: 20px;">Unban Request Submitted Successfully!</h2>
+                <p>Your request has been received and is being processed by our team.</p>
+                
+                <div class="timer" id="countdown">43:00:00</div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                
+                <p>Estimated waiting time: <strong id="wait-time">43 hours</strong></p>
+                
+                <div style="margin: 30px 0; text-align: left;">
+                    <h3 style="margin-bottom: 15px; color: var(--primary);">Request Details</h3>
+                    <div class="reason">
+                        <p><strong>Account UID:</strong> <span id="result-uid"></span></p>
+                        <p><strong>Nickname:</strong> <span id="result-nickname"></span></p>
+                        <p><strong>Device:</strong> <span id="result-device"></span></p>
+                        <p><strong>Server:</strong> <span id="result-server"></span></p>
+                        <p><strong>Account Level:</strong> <span id="result-level"></span></p>
+                        <p><strong>Ban Reason:</strong> <span id="result-reason"></span></p>
+                    </div>
+                </div>
+                
+                <div class="reason">
+                    <h3>Professional Appeal Submitted</h3>
+                    <p>We have submitted a professional appeal to Garena Free Fire support team with the following justification:</p>
+                    <p id="appeal-reason">The player has acknowledged their mistake and assures that it won't happen again. They have been a loyal Free Fire player for a long time and this is their first offense. We request you to consider their appeal and unban their account.</p>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <p>You will receive a notification once your account is unbanned. Please do not submit multiple requests as it may delay the process.</p>
+                    <button class="btn" onclick="location.reload()" style="margin-top: 20px;">
+                        <i class="fas fa-redo"></i> Submit Another Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>This is an unofficial Free Fire fan site. Free Fire is a registered trademark of Garena. We are not affiliated with Garena.</p>
+        <p>© 2023 Free Fire ID Unban Support. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('login-btn');
+        const appModal = document.getElementById('app-modal');
+        const downloadBtn = document.getElementById('download-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const loginSection = document.getElementById('login-section');
+        const loadingSection = document.getElementById('loading-section');
+        const formSection = document.getElementById('form-section');
+        const resultsSection = document.getElementById('results-section');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        
+        // Login button click
+        loginBtn.addEventListener('click', function() {
+            appModal.style.display = 'flex';
+        });
+        
+        // Cancel button click
+        cancelBtn.addEventListener('click', function() {
+            appModal.style.display = 'none';
+        });
+        
+        // Download button click
+        downloadBtn.addEventListener('click', function() {
+            appModal.style.display = 'none';
+            loginSection.style.display = 'none';
+            loadingSection.style.display = 'flex';
+            
+            // Simulate app download and verification
+            setTimeout(function() {
+                // Redirect to download URL
+                window.open('https://control.kochava.com/v1/cpi/click?campaign_id=kozz76680836-5293gp54069a2ec5273&network_id=8411', '_blank');
+                
+                // Show loading for verification
+                setTimeout(function() {
+                    loadingSection.style.display = 'none';
+                    formSection.style.display = 'block';
+                }, 3000);
+            }, 1000);
+        });
+        
+        // File upload display
+        document.getElementById('screenshot').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Choose File';
+            document.getElementById('file-name').textContent = fileName;
+        });
+        
+        // Form submission
+        document.getElementById('unban-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading overlay with FF PNG
+            loadingOverlay.style.display = 'flex';
+            
+            // Simulate processing delay
+            setTimeout(function() {
+                // Hide loading overlay
+                loadingOverlay.style.display = 'none';
+                
+                // Get form values
+                const uid = document.getElementById('uid').value;
+                const nickname = document.getElementById('nickname').value;
+                const device = document.getElementById('device').value;
+                const server = document.getElementById('server').value;
+                const reason = document.getElementById('reason').value;
+                const level = document.getElementById('level').value;
+                
+                // Set results
+                document.getElementById('result-uid').textContent = uid;
+                document.getElementById('result-nickname').textContent = nickname;
+                document.getElementById('result-device').textContent = device;
+                document.getElementById('result-server').textContent = server;
+                document.getElementById('result-reason').textContent = reason;
+                document.getElementById('result-level').textContent = level;
+                
+                // Generate random appeal reason
+                const appealReasons = [
+                    "The player has acknowledged their mistake and assures that it won't happen again. They have been a loyal Free Fire player for a long time and this is their first offense. We request you to consider their appeal and unban their account.",
+                    "Our investigation shows that the player's account was compromised and used by someone else. The original owner has since secured their account and promises to maintain account security.",
+                    "The player was unaware that the software they used violated Free Fire's terms of service. They have uninstalled the software and promise to play fairly in the future.",
+                    "This appears to be a case of mistaken identity or false reporting. The player has a clean record otherwise and we believe this ban was issued in error.",
+                    "The player has shown genuine remorse for their actions and has committed to following all game rules moving forward. They are a valuable member of the Free Fire community.",
+                    "After reviewing the case, we believe the punishment does not fit the offense. The player used minor exploits that didn't significantly impact gameplay.",
+                    "The player's account was temporarily accessed by a sibling who violated the terms. The account owner has taken steps to prevent this from happening again.",
+                    "This is the player's first violation after years of clean gameplay. We believe they deserve a second chance with a formal warning.",
+                    "The player was experiencing connection issues that may have been misinterpreted as cheating. They have since resolved their internet problems.",
+                    "Our analysis indicates the ban may have resulted from a bug in the anti-cheat system. We request a manual review of this case.",
+                    "The player has invested significant time and money into their account. A permanent ban seems excessive for this first-time offense.",
+                    "The violation occurred during a period when the player was not in control of their account. They have since regained control and secured it.",
+                    "The player used unauthorized software briefly out of curiosity but immediately realized their mistake. They have uninstalled all such programs.",
+                    "This appears to be an automated ban triggered by unusual but legitimate gameplay. The player is skilled but does not use cheats.",
+                    "The player acknowledges using exploits in training mode only, not in competitive matches. They understand this was wrong and won't repeat it.",
+                    "Our review shows the player was falsely reported by a group of players they defeated in a match. This appears to be a targeted false report campaign.",
+                    "The player's device was infected with malware that triggered the anti-cheat system. They have since cleaned their device and installed security software.",
+                    "The violation was minor and did not give the player any competitive advantage. We believe a warning would be more appropriate than a ban.",
+                    "The player has a disability and uses accessibility tools that may have been flagged incorrectly by the anti-cheat system.",
+                    "This is a case of account sharing where the other person violated the rules. The original owner has stopped sharing their account."
+                ];
+                
+                const randomAppeal = appealReasons[Math.floor(Math.random() * appealReasons.length)];
+                document.getElementById('appeal-reason').textContent = randomAppeal;
+                
+                // Generate random wait time between 24-43 hours
+                const waitHours = Math.floor(Math.random() * 20) + 24;
+                document.getElementById('wait-time').textContent = `${waitHours} hours`;
+                
+                // Show results section, hide form
+                formSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+                
+                // Start countdown timer
+                startCountdown(waitHours);
+            }, 3000); // 3 second loading delay
+        });
+        
+        // Countdown timer
+        function startCountdown(hours) {
+            let totalSeconds = hours * 3600;
+            const countdownElement = document.getElementById('countdown');
+            const progressElement = document.getElementById('progress');
+            
+            const countdownInterval = setInterval(function() {
+                totalSeconds--;
+                
+                if (totalSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = "00:00:00";
+                    progressElement.style.width = '100%';
+                    return;
+                }
+                
+                const hoursLeft = Math.floor(totalSeconds / 3600);
+                const minutesLeft = Math.floor((totalSeconds % 3600) / 60);
+                const secondsLeft = totalSeconds % 60;
+                
+                countdownElement.textContent = 
+                    `${hoursLeft.toString().padStart(2, '0')}:${minutesLeft.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
+                
+                const progressPercentage = 100 - (totalSeconds / (hours * 3600)) * 100;
+                progressElement.style.width = `${progressPercentage}%`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
