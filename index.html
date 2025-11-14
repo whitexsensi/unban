@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Free Fire Unban Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --neon: #00ff41;
+      --muted: #6b7280;
+      --ff-green: #00ff41;
+      --ff-dark: #0a0a0a;
+      --ff-gray: #1f2937;
+      --text-light: #f9fafb;
+      --accent: #10b981;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Montserrat', system-ui, Arial;
+      background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+      color: var(--text-light);
+      overflow-x: hidden;
+    }
+    
+    .stage {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+    }
+    
+    .panel {
+      width: 920px;
+      max-width: 96%;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 5px 25px rgba(0, 255, 65, 0.15);
+      border: 1px solid rgba(0, 255, 65, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Free Fire styled title */
+    .titleStrip {
+      background: linear-gradient(90deg, var(--ff-green), #10b981);
+      color: #000;
+      padding: 18px 22px;
+      border-radius: 8px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 22px;
+      display: inline-block;
+      min-width: 420px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 255, 65, 0.3);
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .titleStrip::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    /* password row */
+    .labelRow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+    
+    .lockIcon {
+      font-weight: 900;
+      color: var(--ff-green);
+      width: 30px;
+      font-size: 24px;
+    }
+    
+    .pwUnderline {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pwInput {
+      background: transparent;
+      border: 0;
+      color: var(--ff-green);
+      outline: none;
+      padding: 10px 12px;
+      font-size: 16px;
+      min-width: 360px;
+      text-align: center;
+      border-bottom: 2px solid rgba(0, 255, 65, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .pwInput:focus {
+      border-bottom: 2px solid var(--ff-green);
+    }
+    
+    /* button styles */
+    .buttonRow {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .ffButton {
+      background: linear-gradient(135deg, var(--ff-green), #10b981);
+      color: #000;
+      padding: 14px 36px;
+      border-radius: 8px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      min-width: 140px;
+      text-align: center;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 255, 65, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .ffButton:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 255, 65, 0.4);
+    }
+    
+    .ffButton.secondary {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--ff-green);
+      border: 2px solid rgba(0, 255, 65, 0.5);
+    }
+    
+    /* loading */
+    .loadingWrap {
+      margin-top: 28px;
+      display: inline-block;
+      border: 2px solid var(--ff-green);
+      padding: 20px 30px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      width: 100%;
+      max-width: 600px;
+    }
+    
+    .loadingLabel {
+      color: var(--ff-green);
+      font-weight: 800;
+      display: block;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    
+    .progressOuter {
+      width: 100%;
+      height: 10px;
+      border-radius: 10px;
+      background: rgba(0, 255, 65, 0.1);
+      display: block;
+      overflow: hidden;
+    }
+    
+    .progressInner {
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--ff-green), #10b981);
+      transition: width .25s linear;
+    }
+    
+    /* countdown */
+    .countdown {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ff-green);
+      text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    }
+    
+    .countdown span {
+      display: inline-block;
+      min-width: 60px;
+      padding: 5px 10px;
+      background: rgba(0, 255, 65, 0.1);
+      border-radius: 5px;
+      margin: 0 5px;
+      color: var(--text-light);
+    }
+    
+    /* success/error messages */
+    .messageBox {
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .success {
+      background: rgba(0, 200, 83, 0.1);
+      border: 1px solid rgba(0, 200, 83, 0.5);
+      color: #00ff41;
+    }
+    
+    .error {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.5);
+      color: #ef4444;
+    }
+    
+    /* download prompt */
+    .downloadPrompt {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 10, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+    
+    .downloadBox {
+      background: #0f172a;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      border: 2px solid var(--ff-green);
+      box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+    }
+    
+    .downloadBox h3 {
+      color: var(--ff-green);
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+    
+    .downloadBox p {
+      margin-bottom: 20px;
+      line-height: 1.5;
+      color: var(--text-light);
+    }
+    
+    .appIcon {
+      width: 80px;
+      height: 80px;
+      border-radius: 15px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--ff-green), #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: black;
+      font-weight: 800;
+    }
+    
+    /* shake animation */
+    @keyframes shake {
+      0% { transform: translateX(0) }
+      25% { transform: translateX(-8px) }
+      50% { transform: translateX(8px) }
+      75% { transform: translateX(-6px) }
+      100% { transform: translateX(0) }
+    }
+    
+    .shake {
+      animation: shake .6s;
+    }
+    
+    /* footer */
+    .footer {
+      position: fixed;
+      left: 18px;
+      bottom: 14px;
+      color: var(--ff-green);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    
+    .rightFoot {
+      position: fixed;
+      right: 18px;
+      bottom: 14px;
+      color: var(--ff-green);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    
+    .miniLogo {
+      position: fixed;
+      right: 18px;
+      bottom: 76px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 3px solid rgba(0, 255, 65, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a0a;
+    }
+    
+    .miniLogo div {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ff-green), #10b981);
+    }
+    
+    /* inbox section styles */
+    .inboxSection {
+      margin-top: 28px;
+      text-align: left;
+      border: 2px solid var(--ff-green);
+      padding: 20px 30px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      width: 100%;
+      max-width: 600px;
+      display: inline-block;
+    }
+    
+    .inboxLabel {
+      color: var(--ff-green);
+      font-weight: 800;
+      display: block;
+      margin-bottom: 15px;
+      font-size: 18px;
+      text-align: center;
+    }
+    
+    .inboxDetails {
+      line-height: 1.8;
+    }
+    
+    .inboxDetails p {
+      margin-bottom: 8px;
+    }
+    
+    .inboxDetails strong {
+      color: var(--ff-green);
+    }
+    
+    /* version selector styles */
+    .versionRow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    
+    .versionIcon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    
+    .versionText {
+      font-weight: 600;
+      color: var(--text-light);
+    }
+    
+    .versionSelect {
+      color: var(--ff-green);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    .versionSelect:hover {
+      background: rgba(0, 255, 65, 0.1);
+    }
+    
+    /* Checkbox styling */
+    input[type="checkbox"] {
+      accent-color: var(--ff-green);
+      width: 18px;
+      height: 18px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .panel {
+        padding: 20px;
+      }
+      
+      .titleStrip {
+        min-width: 300px;
+        font-size: 18px;
+        padding: 15px;
+      }
+      
+      .pwInput {
+        min-width: 80vw;
+      }
+      
+      .buttonRow {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .ffButton {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .inboxSection {
+        padding: 15px 20px;
+      }
+      
+      .versionRow {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .titleStrip {
+        min-width: 250px;
+        font-size: 16px;
+      }
+      
+      .countdown {
+        font-size: 18px;
+      }
+      
+      .countdown span {
+        min-width: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="panel">
+      <!-- PASSWORD SCREEN -->
+      <div id="screen-password">
+        <div class="titleStrip">Free Fire Unban Tool</div>
+        
+        <div class="labelRow">
+          <div class="lockIcon">🔒</div>
+          <div style="font-weight:700;color:var(--ff-green);letter-spacing:0.6px">PASSWORD :</div>
+        </div>
+        
+        <div style="height:12px"></div>
+        <div class="pwUnderline" id="pwWrap">
+          <input id="passwordInput" class="pwInput" type="password" placeholder="Complete task to reveal password" readonly>
+        </div>
+        <div style="height:8px"></div>
+        
+        <div class="buttonRow">
+          <button id="pwLoginBtn" class="ffButton">LOGIN</button>
+          <button id="taskBtn" class="ffButton secondary">COMPLETE TASK</button>
+        </div>
+        
+        <div class="messageBox" id="passwordMessage" style="display:none;">
+          Complete the task to get the password automatically filled.
+        </div>
+      </div>
+      
+      <!-- UID SCREEN -->
+      <div id="screen-uid" style="display:none;">
+        <div class="titleStrip">Free Fire Unban</div>
+        
+        <div style="height:12px"></div>
+        <div class="labelRow">
+          <div style="font-weight:700;color:var(--ff-green);letter-spacing:0.6px">ENTER YOUR UID :</div>
+        </div>
+        
+        <div style="height:12px"></div>
+        <div class="pwUnderline">
+          <input id="uidInput" class="pwInput" type="text" placeholder="Enter only numbers (e.g., 986238429)" maxlength="10">
+        </div>
+        <div style="height:8px"></div>
+        
+        <!-- Version row -->
+        <div class="versionRow">
+          <img src="https://an1.com/uploads/posts/2025-10/1761724015_free-fire.png" 
+               alt="Free Fire" class="versionIcon">
+          <div class="versionText">FREE FIRE 1.114.13</div>
+          <span class="versionSelect" id="versionSelect">77% ACCURACY</span>
+        </div>
+        
+        <!-- Unsuspend toggle -->
+        <div class="labelRow" style="margin-top:16px;gap:10px">
+          <input type="checkbox" id="unsuspend" checked />
+          <label for="unsuspend" style="font-weight:600;color:var(--text-light)">Permanent Unsuspend</label>
+        </div>
+        
+        <!-- Buttons -->
+        <div class="buttonRow">
+          <button id="uidNextBtn" class="ffButton">START PROCESS</button>
+          <button id="uidBackBtn" class="ffButton secondary">BACK</button>
+        </div>
+        
+        <div class="messageBox" id="uidMessage" style="display:none;"></div>
+      </div>
+      
+      <!-- LOADING SCREEN -->
+      <div id="screen-loading" style="display:none;">
+        <div class="titleStrip">Processing Request</div>
+        
+        <div class="loadingWrap">
+          <span class="loadingLabel">VERIFYING ACCOUNT...</span>
+          <div style="height:15px"></div>
+          <div class="progressOuter"><div id="progressInner" class="progressInner"></div></div>
+        </div>
+        
+        <div class="messageBox" id="loadingMessage" style="display:none;"></div>
+      </div>
+      
+      <!-- SUCCESS SCREEN -->
+      <div id="screen-success" style="display:none;">
+        <div class="titleStrip">Unban In Progress</div>
+        
+        <div style="height:20px"></div>
+        
+        <div class="messageBox success">
+          <h3>Unban Process Started Successfully!</h3>
+          <p>Your account will be unsuspended within:</p>
+          <div class="countdown" id="countdown">24:00:00</div>
+          <p style="margin-top:15px;font-size:14px;">Do not share this process with others.</p>
+        </div>
+        
+        <!-- INBOX SECTION -->
+        <div class="inboxSection">
+          <span class="inboxLabel">ACCOUNT DETAILS (Inbox)</span>
+          <div class="inboxDetails" id="inboxDetails">
+            <!-- Details will be populated by JavaScript -->
+            <p><strong>UID:</strong> <span id="displayUid">Loading...</span></p>
+            <p><strong>Status:</strong> Verification in Progress</p>
+            <p><strong>Task:</strong> Completed</p>
+            <p><strong>Process ID:</strong> <span id="processId">FF-UNBAN-2024</span></p>
+            <p><strong>Started:</strong> <span id="startTime">Just now</span></p>
+          </div>
+        </div>
+        
+        <div style="height:20px"></div>
+        
+        <div class="buttonRow">
+          <button id="restartBtn" class="ffButton">CHECK ANOTHER ACCOUNT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Download Prompt -->
+  <div id="downloadPrompt" class="downloadPrompt" style="display:none;">
+    <div class="downloadBox">
+      <div class="appIcon">FF</div>
+      <h3>Complete Task to Continue</h3>
+      <p>Click the button below to open the verification link. After completing the task, return to this page.</p>
+      <div style="height:20px"></div>
+      <button id="openLinkBtn" class="ffButton">OPEN VERIFICATION LINK</button>
+      <div style="height:10px"></div>
+      <button id="cancelDownload" class="ffButton secondary">CANCEL</button>
+    </div>
+  </div>
+  
+  <div class="footer">@GARENA</div>
+  <div class="rightFoot">UNBAN TOOL v2.1</div>
+  <div class="miniLogo"><div></div></div>
+  
+  <script>
+    // Configuration
+    const CONFIG = {
+      // Password will be generated randomly
+      progressSpeed: 300,
+      // Possible unban durations in hours
+      unbanDurations: [24, 42, 14, 36, 48],
+      // Possible errors
+      errors: [
+        "Server connection failed. Please try again.",
+        "UID verification failed. Check your UID and try again.",
+        "Account is permanently banned. Cannot process request.",
+        "Service temporarily unavailable. Please try again later.",
+        "Invalid UID format. Only numbers are allowed.",
+        "Too many attempts. Please wait 5 minutes.",
+        "Network error. Check your connection and try again.",
+        "UID not found in database. Verify your UID.",
+        "Server overloaded. Please try again in a few minutes.",
+        "Authentication failed. Restart the process."
+      ],
+      // Kochava tracking link
+      kochavaLink: "https://control.kochava.com/v1/cpi/click?campaign_id=kozz76680836-5293gp54069a2ec5273&network_id=8411"
+    };
+    
+    // DOM Elements
+    const screens = {
+      password: document.getElementById('screen-password'),
+      uid: document.getElementById('screen-uid'),
+      loading: document.getElementById('screen-loading'),
+      success: document.getElementById('screen-success')
+    };
+    
+    const passwordInput = document.getElementById('passwordInput');
+    const pwLoginBtn = document.getElementById('pwLoginBtn');
+    const taskBtn = document.getElementById('taskBtn');
+    const passwordMessage = document.getElementById('passwordMessage');
+    
+    const uidInput = document.getElementById('uidInput');
+    const uidNextBtn = document.getElementById('uidNextBtn');
+    const uidBackBtn = document.getElementById('uidBackBtn');
+    const uidMessage = document.getElementById('uidMessage');
+    
+    const progressInner = document.getElementById('progressInner');
+    const loadingMessage = document.getElementById('loadingMessage');
+    
+    const countdown = document.getElementById('countdown');
+    const restartBtn = document.getElementById('restartBtn');
+    
+    const downloadPrompt = document.getElementById('downloadPrompt');
+    const openLinkBtn = document.getElementById('openLinkBtn');
+    const cancelDownload = document.getElementById('cancelDownload');
+    
+    const pwWrap = document.getElementById('pwWrap');
+    const versionSelect = document.getElementById('versionSelect');
+    
+    // Inbox elements
+    const displayUid = document.getElementById('displayUid');
+    const processId = document.getElementById('processId');
+    const startTime = document.getElementById('startTime');
+    
+    // State variables
+    let generatedPassword = '';
+    let hasCompletedTask = false; // Always start with task not completed
+    let hasShownError = false;
+    let userUid = '';
+    
+    // Initialize
+    function init() {
+      // Set up event listeners
+      pwLoginBtn.addEventListener('click', handlePasswordLogin);
+      taskBtn.addEventListener('click', showDownloadPrompt);
+      uidNextBtn.addEventListener('click', handleUidSubmit);
+      uidBackBtn.addEventListener('click', () => showScreen('password'));
+      restartBtn.addEventListener('click', restartProcess);
+      openLinkBtn.addEventListener('click', openKochavaLink);
+      cancelDownload.addEventListener('click', () => downloadPrompt.style.display = 'none');
+      versionSelect.addEventListener('click', showVersionOptions);
+      
+      // Enter key handlers
+      passwordInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') handlePasswordLogin();
+      });
+      
+      uidInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') handleUidSubmit();
+      });
+      
+      // Validate UID input (numbers only)
+      uidInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '');
+      });
+    }
+    
+    // Show specific screen
+    function showScreen(screenName) {
+      Object.values(screens).forEach(screen => screen.style.display = 'none');
+      screens[screenName].style.display = 'block';
+      
+      // Clear messages when switching screens
+      passwordMessage.style.display = 'none';
+      uidMessage.style.display = 'none';
+      loadingMessage.style.display = 'none';
+    }
+    
+    // Generate random password and fill the field
+    function generateAndFillPassword() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      generatedPassword = '';
+      
+      for (let i = 0; i < 8; i++) {
+        generatedPassword += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      
+      passwordInput.value = generatedPassword;
+      passwordInput.removeAttribute('readonly');
+      passwordMessage.textContent = 'Password has been filled. Click LOGIN to continue.';
+      passwordMessage.style.display = 'block';
+      passwordMessage.className = 'messageBox success';
+      
+      // Mark task as completed
+      hasCompletedTask = true;
+    }
+    
+    // Show download prompt
+    function showDownloadPrompt() {
+      downloadPrompt.style.display = 'flex';
+    }
+    
+    // Open Kochava link in new tab
+    function openKochavaLink() {
+      downloadPrompt.style.display = 'none';
+      
+      // Show loading message
+      passwordMessage.textContent = 'Opening verification link... Please complete the task.';
+      passwordMessage.style.display = 'block';
+      passwordMessage.className = 'messageBox';
+      
+      // Open the link in a new tab
+      window.open(CONFIG.kochavaLink, '_blank');
+      
+      // Simulate task completion after a delay
+      setTimeout(() => {
+        passwordMessage.textContent = 'Task completed. Verifying...';
+        
+        setTimeout(() => {
+          generateAndFillPassword();
+        }, 2000);
+      }, 3000);
+    }
+    
+    // Handle password login
+    function handlePasswordLogin() {
+      if (!hasCompletedTask) {
+        passwordMessage.textContent = 'You must complete the task first to get the password.';
+        passwordMessage.style.display = 'block';
+        passwordMessage.className = 'messageBox error';
+        shakeElement(pwWrap);
+        return;
+      }
+      
+      if (passwordInput.value === generatedPassword) {
+        passwordInput.value = '';
+        showScreen('uid');
+        uidInput.focus();
+      } else {
+        passwordMessage.textContent = 'Incorrect password. Complete the task to get the correct password.';
+        passwordMessage.style.display = 'block';
+        passwordMessage.className = 'messageBox error';
+        shakeElement(pwWrap);
+        passwordInput.style.color = '#ef4444';
+        setTimeout(() => passwordInput.style.color = 'var(--ff-green)', 700);
+      }
+    }
+    
+    // Handle UID submission
+    function handleUidSubmit() {
+      const uid = uidInput.value.trim();
+      userUid = uid; // Store the UID for later use
+      
+      // Validate UID
+      if (!uid) {
+        showUidMessage('Please enter your UID.', 'error');
+        shakeElement(uidInput);
+        return;
+      }
+      
+      if (!/^\d+$/.test(uid)) {
+        showUidMessage('UID must contain only numbers.', 'error');
+        shakeElement(uidInput);
+        return;
+      }
+      
+      if (uid.length < 6 || uid.length > 10) {
+        showUidMessage('UID must be between 6 and 10 digits.', 'error');
+        shakeElement(uidInput);
+        return;
+      }
+      
+      // Check if user typed the UID (not pasted)
+      if (uidInput.getAttribute('data-typed') !== 'true') {
+        showUidMessage('Please type your UID manually. Copy-paste is not allowed.', 'error');
+        shakeElement(uidInput);
+        return;
+      }
+      
+      // Show loading screen
+      showScreen('loading');
+      progressInner.style.width = '0%';
+      
+      // Start progress simulation
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 8 + 5;
+        
+        if (progress >= 100) {
+          progress = 100;
+          progressInner.style.width = '100%';
+          clearInterval(interval);
+          
+          // Sometimes show an error (but only once per session)
+          if (!hasShownError && Math.random() < 0.3) {
+            setTimeout(showRandomError, 500);
+            hasShownError = true;
+          } else {
+            setTimeout(showSuccess, 500);
+          }
+        } else {
+          progressInner.style.width = Math.round(progress) + '%';
+        }
+      }, CONFIG.progressSpeed);
+    }
+    
+    // Show random error
+    function showRandomError() {
+      const randomError = CONFIG.errors[Math.floor(Math.random() * CONFIG.errors.length)];
+      loadingMessage.textContent = randomError;
+      loadingMessage.style.display = 'block';
+      loadingMessage.className = 'messageBox error';
+      
+      // Add retry button
+      const retryBtn = document.createElement('button');
+      retryBtn.textContent = 'RETRY';
+      retryBtn.className = 'ffButton';
+      retryBtn.style.marginTop = '15px';
+      retryBtn.addEventListener('click', () => {
+        showScreen('uid');
+      });
+      
+      loadingMessage.appendChild(retryBtn);
+    }
+    
+    // Show success screen
+    function showSuccess() {
+      // Select random unban duration
+      const duration = CONFIG.unbanDurations[Math.floor(Math.random() * CONFIG.unbanDurations.length)];
+      
+      // Modify UID slightly for the "verification" step (70% chance)
+      let displayUidValue = userUid;
+      if (Math.random() < 0.7) {
+        const changeIndex = Math.floor(userUid.length / 2);
+        const newDigit = (parseInt(userUid[changeIndex]) + 1) % 10;
+        displayUidValue = userUid.substring(0, changeIndex) + newDigit + userUid.substring(changeIndex + 1);
+      }
+      
+      // Update inbox details
+      displayUid.textContent = displayUidValue;
+      
+      // Generate a random process ID
+      const randomId = Math.floor(100000 + Math.random() * 900000);
+      processId.textContent = `FF-UNBAN-${randomId}`;
+      
+      // Set current time
+      const now = new Date();
+      startTime.textContent = now.toLocaleTimeString();
+      
+      // Show success screen with countdown
+      showScreen('success');
+      startCountdown(duration);
+    }
+    
+    // Start countdown timer
+    function startCountdown(hours) {
+      let totalSeconds = hours * 3600;
+      
+      const timer = setInterval(() => {
+        totalSeconds--;
+        
+        if (totalSeconds < 0) {
+          clearInterval(timer);
+          countdown.textContent = 'COMPLETED!';
+          return;
+        }
+        
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        
+        countdown.innerHTML = `
+          <span>${h.toString().padStart(2, '0')}</span>:
+          <span>${m.toString().padStart(2, '0')}</span>:
+          <span>${s.toString().padStart(2, '0')}</span>
+        `;
+      }, 1000);
+    }
+    
+    // Restart the process
+    function restartProcess() {
+      uidInput.value = '';
+      uidInput.setAttribute('data-typed', 'false');
+      userUid = '';
+      hasCompletedTask = false;
+      passwordInput.value = '';
+      passwordInput.setAttribute('readonly', 'true');
+      showScreen('password');
+    }
+    
+    // Show message in UID screen
+    function showUidMessage(message, type) {
+      uidMessage.textContent = message;
+      uidMessage.style.display = 'block';
+      uidMessage.className = `messageBox ${type}`;
+    }
+    
+    // Shake animation for invalid inputs
+    function shakeElement(element) {
+      element.classList.add('shake');
+      setTimeout(() => element.classList.remove('shake'), 650);
+    }
+    
+    // Show version options
+    function showVersionOptions() {
+      const versions = [
+        { name: "FREE FIRE 1.114.13", selected: true },
+        { name: "FREE FIRE MAX 1.114.13", selected: false },
+        { name: "FREE FIRE INDIA 1.114.13", selected: false }
+      ];
+      
+      // Simple version selection (in a real app, this would show a dropdown)
+      const currentVersion = document.querySelector('.versionText');
+      const currentIndex = versions.findIndex(v => v.selected);
+      const nextIndex = (currentIndex + 1) % versions.length;
+      
+      versions.forEach((v, i) => v.selected = i === nextIndex);
+      currentVersion.textContent = versions[nextIndex].name;
+    }
+    
+    // Track if UID was typed (not pasted)
+    uidInput.addEventListener('input', function() {
+      this.setAttribute('data-typed', 'true');
+    });
+    
+    uidInput.addEventListener('paste', function(e) {
+      e.preventDefault();
+      this.setAttribute('data-typed', 'false');
+      showUidMessage('Copy-paste is not allowed. Please type your UID manually.', 'error');
+    });
+    
+    // Initialize the application
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
